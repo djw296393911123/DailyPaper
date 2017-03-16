@@ -8,6 +8,11 @@ import com.djw.dailypaper.model.ZhuanlanModel;
 import com.djw.dailypaper.model.data.Them.ThemData;
 import com.djw.dailypaper.model.data.ZhuanlanData;
 
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+
 /**
  * Created by JasonDong on 2017/3/10.
  */
@@ -31,23 +36,26 @@ public class ZhuanlanPresenter implements ZhuanlanContracts.Presenter {
     @Override
     public void getDataFromModel(String... args) {
         view.showProgress();
-        model.loadData(new RequestListener<ZhuanlanData>() {
-            @Override
-            public void onSuccessful(ZhuanlanData o) {
-                view.getThemData(o);
-            }
+        model.loadData()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<ZhuanlanData>() {
+                    @Override
+                    public void onCompleted() {
+                        view.hideProgress();
+                    }
 
-            @Override
-            public void onFail() {
-                view.showFail();
-                view.hideProgress();
-            }
+                    @Override
+                    public void onError(Throwable e) {
+                        view.hideProgress();
+                    }
 
-            @Override
-            public void onComplete() {
-                view.showComplete();
-                view.hideProgress();
-            }
-        });
+                    @Override
+                    public void onNext(ZhuanlanData zhuanlanData) {
+                        view.getThemData(zhuanlanData);
+                    }
+                });
+
+
     }
 }

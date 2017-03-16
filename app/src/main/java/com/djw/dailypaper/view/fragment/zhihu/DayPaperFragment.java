@@ -1,6 +1,8 @@
 package com.djw.dailypaper.view.fragment.zhihu;
 
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -16,6 +18,11 @@ import com.djw.dailypaper.base.BaseFragment;
 import com.djw.dailypaper.contracts.ZhihuContracts;
 import com.djw.dailypaper.model.data.DaypaperData;
 import com.djw.dailypaper.presenter.ZhihuPresenter;
+
+import rx.Observable;
+import rx.Subscriber;
+import rx.functions.Action1;
+import rx.functions.Func1;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,6 +42,19 @@ public class DayPaperFragment extends BaseFragment implements ZhihuContracts.Vie
         if (!isSuccess || !isVisible)
             return;
         presenter.start();
+        Observable.just("idf")
+                .map(new Func1<String, Bitmap>() {
+                    @Override
+                    public Bitmap call(String s) {
+                        return BitmapFactory.decodeFile(s);
+                    }
+                })
+                .subscribe(new Action1<Bitmap>() {
+                    @Override
+                    public void call(Bitmap bitmap) {
+                        
+                    }
+                });
     }
 
     @Override

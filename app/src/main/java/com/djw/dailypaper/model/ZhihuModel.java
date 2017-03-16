@@ -8,6 +8,7 @@ import com.djw.dailypaper.retrofit.RetrofitUtil;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import rx.Observable;
 import rx.Subscriber;
 
 /**
@@ -16,44 +17,10 @@ import rx.Subscriber;
 
 public class ZhihuModel implements ZhihuContracts.Model {
 
-    @Override
-    public void loadData(final RequestListener listener, String... args) {
-        RetrofitUtil.getInstance().getDaypaper(new Subscriber<DaypaperData>() {
-            @Override
-            public void onCompleted() {
-                listener.onComplete();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                listener.onFail();
-            }
-
-            @Override
-            public void onNext(DaypaperData daypaperData) {
-                listener.onSuccessful(daypaperData);
-            }
-        });
-    }
 
     @Override
-    public void loadBeforeData(String data, final RequestListener<DaypaperData> listener) {
-        RetrofitUtil.getInstance().getBeforepaper(new Subscriber<DaypaperData>() {
-            @Override
-            public void onCompleted() {
-                listener.onComplete();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                listener.onFail();
-            }
-
-            @Override
-            public void onNext(DaypaperData daypaperData) {
-                listener.onSuccessful(daypaperData);
-            }
-        }, data);
+    public Observable<DaypaperData> loadBeforeData(String data) {
+        return RetrofitUtil.getDefault().getBeforPaper(data);
     }
 
     @Override
@@ -63,4 +30,8 @@ public class ZhihuModel implements ZhihuContracts.Model {
         return Integer.parseInt(format.format(new Date(l)));
     }
 
+    @Override
+    public Observable<DaypaperData> loadData(String... args) {
+        return RetrofitUtil.getDefault().getDaypaper();
+    }
 }

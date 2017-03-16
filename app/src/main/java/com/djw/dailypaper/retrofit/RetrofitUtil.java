@@ -8,9 +8,13 @@ import com.djw.dailypaper.model.data.Them.ThemData;
 import com.djw.dailypaper.model.data.WebviewData;
 import com.djw.dailypaper.model.data.ZhuanlanData;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.HttpUrl;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -24,54 +28,59 @@ import rx.schedulers.Schedulers;
 
 public class RetrofitUtil {
 
-    private static final int DEFAULT_TIMEOUT = 5;
-    private ApiRequest apiServices;
+    private static ApiRequest SERVICE;
+    /**
+     * 请求超时时间
+     */
+    private static final int DEFAULT_TIMEOUT = 10000;
 
-    private static RetrofitUtil mInstance;
+    public static ApiRequest getDefault() {
+        if (SERVICE == null) {
+            //手动创建一个OkHttpClient并设置超时时间
+            OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder();
+            httpClientBuilder.connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
 
-    private RetrofitUtil() {
-        OkHttpClient.Builder builder = new OkHttpClient.Builder();
-        builder.connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
-        Retrofit mRetrofit = new Retrofit.Builder()
-                .client(builder.build())
-                .baseUrl(ApiRequest.ZHIHU_SERVICE)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .build();
-        apiServices = mRetrofit.create(ApiRequest.class);
-    }
+            /**
+             *  拦截器
+             */
+            httpClientBuilder.addInterceptor(new Interceptor() {
+                @Override
+                public okhttp3.Response intercept(Chain chain) throws IOException {
+                    Request request = chain.request();
 
-    public static RetrofitUtil getInstance() {
-        if (mInstance == null) {
-            synchronized (RetrofitUtil.class) {
-                mInstance = new RetrofitUtil();
-            }
+//                    Request.Builder requestBuilder = request.newBuilder();
+//                    RequestBody formBody = new FormBody.Builder()
+//                            .add("1","2")
+//                            .build();
+
+                    HttpUrl.Builder authorizedUrlBuilder = request.url()
+                            .newBuilder()
+                            //添加统一参数 如手机唯一标识符,token等
+                            .addQueryParameter("key1","value1")
+                            .addQueryParameter("key2", "value2");
+
+                    Request newRequest = request.newBuilder()
+                            //对所有请求添加请求头
+                            .header("mobileFlag", "adfsaeefe").addHeader("type", "4")
+                            .method(request.method(), request.body())
+                            .url(authorizedUrlBuilder.build())
+                            .build();
+
+//                    okhttp3.Response originalResponse = chain.proceed(request);
+//                    return originalResponse.newBuilder().header("mobileFlag", "adfsaeefe").addHeader("type", "4").build();
+                    return  chain.proceed(newRequest);
+                }
+            });
+
+
+            SERVICE = new Retrofit.Builder()
+                    .client(httpClientBuilder.build())
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                    .baseUrl(ApiRequest.ZHIHU_SERVICE)
+                    .build().create(ApiRequest.class);
         }
-        return mInstance;
-    }
-
-    public void getDaypaper(Subscriber<DaypaperData> subscriber) {
-        apiServices.getDaypaper().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(subscriber);
-    }
-
-    public void getBeforepaper(Subscriber<DaypaperData> subscriber, String date) {
-        apiServices.getBeforPaper(date).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(subscriber);
-    }
-
-    public void getThem(Subscriber<ThemData> subscriber) {
-        apiServices.getThemData().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(subscriber);
-    }
-
-    public void getZhuanlan(Subscriber<ZhuanlanData> subscriber) {
-        apiServices.getZhuanlan().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(subscriber);
-    }
-
-    public void getHot(Subscriber<HotData> subscriber) {
-        apiServices.getHot().observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(subscriber);
-    }
-
-    public void getWebview(String id, Subscriber<WebviewData> subscriber) {
-        apiServices.getWebview(id).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(subscriber);
+        return SERVICE;
     }
 
 }

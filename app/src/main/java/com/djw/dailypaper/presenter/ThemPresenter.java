@@ -5,6 +5,10 @@ import com.djw.dailypaper.interfaces.RequestListener;
 import com.djw.dailypaper.model.ThemModel;
 import com.djw.dailypaper.model.data.Them.ThemData;
 
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+
 /**
  * Created by JasonDong on 2017/3/10.
  */
@@ -28,23 +32,24 @@ public class ThemPresenter implements ThemContracts.Presenter {
     @Override
     public void getDataFromModel(String... args) {
         view.showProgress();
-        model.loadData(new RequestListener<ThemData>() {
-            @Override
-            public void onSuccessful(ThemData o) {
-                view.getThemData(o);
-            }
+        model.loadData()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<ThemData>() {
+                    @Override
+                    public void onCompleted() {
+                        view.hideProgress();
+                    }
 
-            @Override
-            public void onFail() {
-                view.showFail();
-                view.hideProgress();
-            }
+                    @Override
+                    public void onError(Throwable e) {
+                        view.hideProgress();
+                    }
 
-            @Override
-            public void onComplete() {
-                view.showComplete();
-                view.hideProgress();
-            }
-        });
+                    @Override
+                    public void onNext(ThemData themData) {
+                        view.getThemData(themData);
+                    }
+                });
     }
 }

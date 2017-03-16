@@ -6,6 +6,8 @@ import com.djw.dailypaper.base.BaseView;
 import com.djw.dailypaper.interfaces.RequestListener;
 import com.djw.dailypaper.model.data.DaypaperData;
 
+import rx.Observable;
+
 /**
  * Created by JasonDong on 2017/3/10.
  */
@@ -29,7 +31,7 @@ public interface ZhihuContracts {
 
     interface Model extends BaseModel {
 
-        void loadBeforeData(String data, RequestListener<DaypaperData> listener);
+        Observable<DaypaperData> loadBeforeData(String data);
 
         int getDateToday(long date);
     }

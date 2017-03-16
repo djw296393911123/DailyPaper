@@ -17,6 +17,7 @@ import android.view.MenuItem;
 
 import com.djw.dailypaper.R;
 import com.djw.dailypaper.base.BaseActivity;
+import com.djw.dailypaper.view.fragment.GankFragment;
 import com.djw.dailypaper.view.fragment.ZhihuFragment;
 
 public class HomeActivity extends BaseActivity
@@ -44,14 +45,12 @@ public class HomeActivity extends BaseActivity
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.getMenu().findItem(R.id.zhihu).setChecked(true);
-        initFragment(1);
         navigationView.setNavigationItemSelectedListener(this);
     }
 
     @Override
     public void doBusiness() {
-
+        initFragment(1);
     }
 
     @Override
@@ -105,7 +104,14 @@ public class HomeActivity extends BaseActivity
                     zhihuFragment = new ZhihuFragment();
                     transaction.add(R.id.fl_home, zhihuFragment);
                 }
-                break;
+//            case 2:
+//                if (gankFragment != null) {
+//                    transaction.show(gankFragment);
+//                } else {
+//                    gankFragment = new GankFragment();
+//                    transaction.add(R.id.fl_home, gankFragment);
+//                }
+//                break;
 
         }
         transaction.commit();
@@ -115,6 +121,9 @@ public class HomeActivity extends BaseActivity
         if (zhihuFragment != null) {
             transaction.hide(zhihuFragment);
         }
+//        if (gankFragment != null) {
+//            transaction.hide(gankFragment);
+//        }
 
     }
 }

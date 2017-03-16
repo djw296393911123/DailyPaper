@@ -1,6 +1,7 @@
 package com.djw.dailypaper.base;
 
-import com.djw.dailypaper.interfaces.RequestListener;
+
+import rx.Observable;
 
 /**
  * Created by JasonDong on 2017/3/9.
@@ -8,6 +9,6 @@ import com.djw.dailypaper.interfaces.RequestListener;
 
 public interface BaseModel<T> {
 
-    void loadData(RequestListener<T> listener, String... args);
+    Observable<T> loadData(String... args);
 
 }

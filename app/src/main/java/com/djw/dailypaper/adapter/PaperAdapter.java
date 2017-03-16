@@ -20,6 +20,7 @@ import com.djw.dailypaper.model.data.paper.PaperData;
 import com.djw.dailypaper.model.data.paper.TypeData;
 import com.djw.dailypaper.view.activity.WebviewActivity;
 import com.youth.banner.Banner;
+import com.youth.banner.BannerConfig;
 import com.youth.banner.listener.OnBannerClickListener;
 import com.youth.banner.loader.ImageLoader;
 
@@ -48,11 +49,15 @@ public class PaperAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             this.list.clear();
             List<DaypaperData.TopStoriesBean> top_stories = daypaperData.getTop_stories();
             List<String> urls = new ArrayList<>();
+            List<String> titles = new ArrayList<>();
+            List<String> ids = new ArrayList<>();
             for (int i = 0; i < top_stories.size(); i++) {
                 DaypaperData.TopStoriesBean topStoriesBean = top_stories.get(i);
                 urls.add(topStoriesBean.getImage());
+                titles.add(topStoriesBean.getTitle());
+                ids.add(String.valueOf(topStoriesBean.getId()));
             }
-            list.add(new BannerData("", urls, 0));
+            list.add(new BannerData(titles, urls, ids));
         }
         list.add(new TypeData(date));
         List<DaypaperData.StoriesBean> stories = daypaperData.getStories();
@@ -83,8 +88,10 @@ public class PaperAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 Banner banner = ((BannerHolder) holder).banner;
                 BannerData bannerData = (BannerData) list.get(position);
                 banner.setImageLoader(new GlideImageLoader());
+                banner.setBannerStyle(BannerConfig.NUM_INDICATOR_TITLE);
                 banner.setOffscreenPageLimit(1);
                 banner.setOnBannerClickListener(this);
+                banner.setBannerTitles(bannerData.getTitle());
                 banner.setImages(bannerData.getUrl());
                 banner.start();
                 break;
@@ -119,7 +126,7 @@ public class PaperAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public void OnBannerClick(int position) {
-        context.startActivity(new Intent(context, WebviewActivity.class).putExtra("id", ((BannerData) list.get(position)).getId()));
+        context.startActivity(new Intent(context, WebviewActivity.class).putExtra("id", ((BannerData) list.get(0)).getId().get(position - 1)));
     }
 
     class PaperHolder extends BaseHolder {

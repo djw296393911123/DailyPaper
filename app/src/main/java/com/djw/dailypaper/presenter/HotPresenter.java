@@ -8,6 +8,10 @@ import com.djw.dailypaper.model.ZhuanlanModel;
 import com.djw.dailypaper.model.data.HotData;
 import com.djw.dailypaper.model.data.ZhuanlanData;
 
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+
 /**
  * Created by JasonDong on 2017/3/10.
  */
@@ -31,23 +35,24 @@ public class HotPresenter implements HotContracts.Presenter {
     @Override
     public void getDataFromModel(String... args) {
         view.showProgress();
-        model.loadData(new RequestListener<HotData>() {
-            @Override
-            public void onSuccessful(HotData o) {
-                view.getHotData(o);
-            }
+        model.loadData()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<HotData>() {
+                    @Override
+                    public void onCompleted() {
+                        view.hideProgress();
+                    }
 
-            @Override
-            public void onFail() {
-                view.showFail();
-                view.hideProgress();
-            }
+                    @Override
+                    public void onError(Throwable e) {
+                        view.hideProgress();
+                    }
 
-            @Override
-            public void onComplete() {
-                view.showComplete();
-                view.hideProgress();
-            }
-        });
+                    @Override
+                    public void onNext(HotData hotData) {
+                        view.getHotData(hotData);
+                    }
+                });
     }
 }

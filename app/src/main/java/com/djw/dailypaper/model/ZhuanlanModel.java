@@ -7,6 +7,7 @@ import com.djw.dailypaper.model.data.Them.ThemData;
 import com.djw.dailypaper.model.data.ZhuanlanData;
 import com.djw.dailypaper.retrofit.RetrofitUtil;
 
+import rx.Observable;
 import rx.Subscriber;
 
 /**
@@ -15,23 +16,10 @@ import rx.Subscriber;
 
 public class ZhuanlanModel implements ZhuanlanContracts.Model {
 
+
+
     @Override
-    public void loadData(final RequestListener listener, String... args) {
-        RetrofitUtil.getInstance().getZhuanlan(new Subscriber<ZhuanlanData>() {
-            @Override
-            public void onCompleted() {
-                listener.onComplete();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                listener.onFail();
-            }
-
-            @Override
-            public void onNext(ZhuanlanData data) {
-                listener.onSuccessful(data);
-            }
-        });
+    public Observable<ZhuanlanData> loadData(String... args) {
+        return RetrofitUtil.getDefault().getZhuanlan();
     }
 }

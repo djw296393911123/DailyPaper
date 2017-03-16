@@ -5,6 +5,10 @@ import com.djw.dailypaper.interfaces.RequestListener;
 import com.djw.dailypaper.model.ZhihuModel;
 import com.djw.dailypaper.model.data.DaypaperData;
 
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+
 /**
  * Created by JasonDong on 2017/3/10.
  */
@@ -28,24 +32,25 @@ public class ZhihuPresenter implements ZhihuContracts.Presenter {
     @Override
     public void getDataFromModel(String... args) {
         view.showProgress();
-        model.loadData(new RequestListener<DaypaperData>() {
-            @Override
-            public void onSuccessful(DaypaperData daypaperData) {
-                view.getDayPaper(daypaperData);
-            }
+        model.loadData()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<DaypaperData>() {
+                    @Override
+                    public void onCompleted() {
+                        view.hideProgress();
+                    }
 
-            @Override
-            public void onFail() {
-                view.showFail();
-                view.hideProgress();
-            }
+                    @Override
+                    public void onError(Throwable e) {
+                        view.hideProgress();
+                    }
 
-            @Override
-            public void onComplete() {
-                view.showComplete();
-                view.hideProgress();
-            }
-        });
+                    @Override
+                    public void onNext(DaypaperData daypaperData) {
+                        view.getDayPaper(daypaperData);
+                    }
+                });
     }
 
     @Override
@@ -56,21 +61,24 @@ public class ZhihuPresenter implements ZhihuContracts.Presenter {
     @Override
     public void getBeforePaper(String date) {
         view.showProgress();
-        model.loadBeforeData(date, new RequestListener<DaypaperData>() {
-            @Override
-            public void onSuccessful(DaypaperData daypaperData) {
-                view.getBeforePaper(daypaperData);
-            }
+        model.loadBeforeData(date)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<DaypaperData>() {
+                    @Override
+                    public void onCompleted() {
+                        view.hideProgress();
+                    }
 
-            @Override
-            public void onFail() {
-                view.hideProgress();
-            }
+                    @Override
+                    public void onError(Throwable e) {
+                        view.hideProgress();
+                    }
 
-            @Override
-            public void onComplete() {
-                view.hideProgress();
-            }
-        });
+                    @Override
+                    public void onNext(DaypaperData daypaperData) {
+                        view.getBeforePaper(daypaperData);
+                    }
+                });
     }
 }
