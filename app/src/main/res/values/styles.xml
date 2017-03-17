@@ -17,4 +17,11 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">10sp</item>
+    </style>
+    <style name="dialog_style">
+        <item name="android:windowEnterAnimation">@anim/showimage_in</item>
+        <item name="android:windowExitAnimation">@anim/showimage_out</item>
+    </style>
 </resources>

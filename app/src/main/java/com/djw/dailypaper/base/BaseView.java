@@ -16,4 +16,6 @@ public interface BaseView<T> {
 
     void showComplete();
 
+    void showDataEmpty();
+
 }

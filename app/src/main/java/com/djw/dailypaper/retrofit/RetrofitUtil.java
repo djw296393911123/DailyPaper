@@ -2,11 +2,6 @@ package com.djw.dailypaper.retrofit;
 
 
 import com.djw.dailypaper.interfaces.ApiRequest;
-import com.djw.dailypaper.model.data.DaypaperData;
-import com.djw.dailypaper.model.data.HotData;
-import com.djw.dailypaper.model.data.Them.ThemData;
-import com.djw.dailypaper.model.data.WebviewData;
-import com.djw.dailypaper.model.data.ZhuanlanData;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -18,9 +13,6 @@ import okhttp3.Request;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by JasonDong on 2017/3/9.

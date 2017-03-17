@@ -42,19 +42,6 @@ public class DayPaperFragment extends BaseFragment implements ZhihuContracts.Vie
         if (!isSuccess || !isVisible)
             return;
         presenter.start();
-        Observable.just("idf")
-                .map(new Func1<String, Bitmap>() {
-                    @Override
-                    public Bitmap call(String s) {
-                        return BitmapFactory.decodeFile(s);
-                    }
-                })
-                .subscribe(new Action1<Bitmap>() {
-                    @Override
-                    public void call(Bitmap bitmap) {
-                        
-                    }
-                });
     }
 
     @Override
@@ -123,6 +110,11 @@ public class DayPaperFragment extends BaseFragment implements ZhihuContracts.Vie
 
     @Override
     public void showComplete() {
+
+    }
+
+    @Override
+    public void showDataEmpty() {
 
     }
 

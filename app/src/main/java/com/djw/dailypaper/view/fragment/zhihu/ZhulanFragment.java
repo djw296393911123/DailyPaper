@@ -1,20 +1,17 @@
 package com.djw.dailypaper.view.fragment.zhihu;
 
 
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.djw.dailypaper.R;
 import com.djw.dailypaper.adapter.ZhuanlanAdapter;
 import com.djw.dailypaper.base.BaseFragment;
 import com.djw.dailypaper.contracts.ZhuanlanContracts;
-import com.djw.dailypaper.model.data.ZhuanlanData;
+import com.djw.dailypaper.model.data.gank.ZhuanlanData;
 import com.djw.dailypaper.presenter.ZhuanlanPresenter;
 
 /**
@@ -79,6 +76,11 @@ public class ZhulanFragment extends BaseFragment implements ZhuanlanContracts.Vi
 
     @Override
     public void showComplete() {
+
+    }
+
+    @Override
+    public void showDataEmpty() {
 
     }
 

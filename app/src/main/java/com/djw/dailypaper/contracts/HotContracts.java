@@ -3,8 +3,7 @@ package com.djw.dailypaper.contracts;
 import com.djw.dailypaper.base.BaseModel;
 import com.djw.dailypaper.base.BasePresenter;
 import com.djw.dailypaper.base.BaseView;
-import com.djw.dailypaper.model.data.HotData;
-import com.djw.dailypaper.model.data.ZhuanlanData;
+import com.djw.dailypaper.model.data.gank.HotData;
 
 /**
  * Created by JasonDong on 2017/3/10.

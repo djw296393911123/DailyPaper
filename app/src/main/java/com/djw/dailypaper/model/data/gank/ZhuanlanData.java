@@ -1,4 +1,4 @@
-package com.djw.dailypaper.model.data;
+package com.djw.dailypaper.model.data.gank;
 
 import java.util.List;
 

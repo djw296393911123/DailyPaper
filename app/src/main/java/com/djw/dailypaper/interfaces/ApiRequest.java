@@ -1,13 +1,19 @@
 package com.djw.dailypaper.interfaces;
 
+import com.djw.dailypaper.model.data.gank.AndroidData;
 import com.djw.dailypaper.model.data.DaypaperData;
-import com.djw.dailypaper.model.data.HotData;
+import com.djw.dailypaper.model.data.gank.HotData;
 import com.djw.dailypaper.model.data.Them.ThemData;
+import com.djw.dailypaper.model.data.Them.ThemInfoData;
 import com.djw.dailypaper.model.data.WebviewData;
-import com.djw.dailypaper.model.data.ZhuanlanData;
+import com.djw.dailypaper.model.data.WxData;
+import com.djw.dailypaper.model.data.gank.ZhuanlanData;
+import com.djw.dailypaper.model.data.gank.ZhuanlanInfoData;
+import com.djw.dailypaper.model.data.sports.SportsData;
 
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 import rx.Observable;
 
 /**
@@ -19,6 +25,10 @@ public interface ApiRequest {
     String SERVICE = "";
 
     String ZHIHU_SERVICE = "http://news-at.zhihu.com/api/4/";
+
+    String Gank_SERVICE = "http://gank.io/api/";
+
+    String WX_SERVICE = "http://api.tianapi.com/";
 
     @GET("news/latest")
     Observable<DaypaperData> getDaypaper();
@@ -37,5 +47,45 @@ public interface ApiRequest {
 
     @GET("news/{id}")
     Observable<WebviewData> getWebview(@Path("id") String id);
+
+    @GET("theme/{id}")
+    Observable<ThemInfoData> getInfoThem(@Path("id") String id);
+
+    @GET("section/{id}")
+    Observable<ZhuanlanInfoData> getInfoZhuanlan(@Path("id") String id);
+
+    //
+    @GET("random/data/福利/1")
+    Observable<AndroidData> getMeiziRadom();
+
+    @GET("data/Android/20/{page}")
+    Observable<AndroidData> getAndroid(@Path("page") String page);
+
+    @GET("data/all/20/{page}")
+    Observable<AndroidData> getAll(@Path("page") String page);
+
+    @GET("data/福利/20/{page}")
+    Observable<AndroidData> getMeizi(@Path("page") String page);
+
+    @GET("data/iOS/20/{page}")
+    Observable<AndroidData> getIos(@Path("page") String page);
+
+    @GET("wxnew/")
+    Observable<WxData> getWx(@Query("key") String key, @Query("num") String num, @Query("page") String page);
+
+    @GET("wxnew/")
+    Observable<WxData> getSearchWx(@Query("key") String key, @Query("num") String num, @Query("page") String page, @Query("word") String wrod);
+
+    @GET("nba/")
+    Observable<SportsData> getNBA(@Query("key") String key, @Query("num") String num, @Query("page") String page);
+
+    @GET("football/")
+    Observable<SportsData> getFootball(@Query("key") String key, @Query("num") String num, @Query("page") String page);
+
+    @GET("startup/")
+    Observable<SportsData> getSocial(@Query("key") String key, @Query("num") String num, @Query("page") String page);
+
+    @GET("meinv/")
+    Observable<SportsData> getGirl(@Query("key") String key, @Query("num") String num, @Query("page") String page);
 
 }

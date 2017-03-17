@@ -106,7 +106,7 @@ public class PaperAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 paperHolder.cardView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-//                        context.startActivity(new Intent(context, WebviewActivity.class).putExtra("id", paperData.getId()));
+                        context.startActivity(new Intent(context, WebviewActivity.class).putExtra("id", String.valueOf(paperData.getId())));
                     }
                 });
                 break;

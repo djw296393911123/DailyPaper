@@ -1,14 +1,9 @@
 package com.djw.dailypaper.presenter;
 
-import com.djw.dailypaper.contracts.ThemContracts;
 import com.djw.dailypaper.contracts.ZhuanlanContracts;
-import com.djw.dailypaper.interfaces.RequestListener;
-import com.djw.dailypaper.model.ThemModel;
 import com.djw.dailypaper.model.ZhuanlanModel;
-import com.djw.dailypaper.model.data.Them.ThemData;
-import com.djw.dailypaper.model.data.ZhuanlanData;
+import com.djw.dailypaper.model.data.gank.ZhuanlanData;
 
-import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;

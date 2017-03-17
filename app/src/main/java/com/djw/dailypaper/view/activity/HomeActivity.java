@@ -1,29 +1,51 @@
 package com.djw.dailypaper.view.activity;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.view.KeyEvent;
+import android.view.MenuInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.djw.dailypaper.R;
 import com.djw.dailypaper.base.BaseActivity;
+import com.djw.dailypaper.model.data.gank.AndroidData;
+import com.djw.dailypaper.retrofit.GankUtil;
+import com.djw.dailypaper.util.SearchPopWindows;
 import com.djw.dailypaper.view.fragment.GankFragment;
+import com.djw.dailypaper.view.fragment.SportsFragment;
+import com.djw.dailypaper.view.fragment.WXFragment;
 import com.djw.dailypaper.view.fragment.ZhihuFragment;
 
-public class HomeActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
+
+public class HomeActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, TextView.OnEditorActionListener {
 
     private ZhihuFragment zhihuFragment;
+
+    private GankFragment gankFragment;
+
+    private SportsFragment sportsFragment;
+
+    private WXFragment wxFragment;
+    private ImageView head;
+    private Toolbar toolbar;
+    private int itemId;
+    private SearchPopWindows searchPopWindows;
+    private long exitTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,9 +57,9 @@ public class HomeActivity extends BaseActivity
 
     @Override
     public void initView() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        toolbar.setTitle("知乎日报");
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -45,11 +67,19 @@ public class HomeActivity extends BaseActivity
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View view = navigationView.getHeaderView(0);
+        head = ((ImageView) view.findViewById(R.id.iv_head));
         navigationView.setNavigationItemSelectedListener(this);
     }
 
     @Override
     public void doBusiness() {
+        GankUtil.getDefault().getMeiziRadom().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<AndroidData>() {
+            @Override
+            public void call(AndroidData data) {
+                Glide.with(context).load(data.getResults().get(0).getUrl()).asBitmap().into(head);
+            }
+        });
         initFragment(1);
     }
 
@@ -63,14 +93,39 @@ public class HomeActivity extends BaseActivity
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.home, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.search && itemId == R.id.wx) {
+            searchPopWindows = new SearchPopWindows(this, this);
+            searchPopWindows.showAsDropDown(toolbar, 5, 5);
+        }
+        return true;
+    }
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        int id = item.getItemId();
-        switch (id) {
+        itemId = item.getItemId();
+        switch (itemId) {
             case R.id.zhihu:
                 initFragment(1);
+                break;
+            case R.id.gank:
+                initFragment(2);
+                break;
+            case R.id.wx:
+                initFragment(3);
+                break;
+            case R.id.xitu:
+                initFragment(4);
                 break;
         }
 //        if (id == R.id.nav_camera) {
@@ -98,20 +153,43 @@ public class HomeActivity extends BaseActivity
         hideFragment(transaction);
         switch (index) {
             case 1:
+                toolbar.setTitle("知乎日报");
                 if (zhihuFragment != null) {
                     transaction.show(zhihuFragment);
                 } else {
                     zhihuFragment = new ZhihuFragment();
                     transaction.add(R.id.fl_home, zhihuFragment);
                 }
-//            case 2:
-//                if (gankFragment != null) {
-//                    transaction.show(gankFragment);
-//                } else {
-//                    gankFragment = new GankFragment();
-//                    transaction.add(R.id.fl_home, gankFragment);
-//                }
-//                break;
+                break;
+            case 2:
+                toolbar.setTitle("干货集中营");
+                if (gankFragment != null) {
+                    transaction.show(gankFragment);
+                } else {
+                    gankFragment = new GankFragment();
+                    transaction.add(R.id.fl_home, gankFragment);
+                }
+                break;
+
+            case 3:
+                toolbar.setTitle("微信精选");
+                if (wxFragment != null) {
+                    transaction.show(wxFragment);
+                } else {
+                    wxFragment = new WXFragment();
+                    transaction.add(R.id.fl_home, wxFragment);
+                }
+                break;
+
+            case 4:
+                toolbar.setTitle("体育新闻");
+                if (sportsFragment != null) {
+                    transaction.show(sportsFragment);
+                } else {
+                    sportsFragment = new SportsFragment();
+                    transaction.add(R.id.fl_home, sportsFragment);
+                }
+                break;
 
         }
         transaction.commit();
@@ -121,9 +199,41 @@ public class HomeActivity extends BaseActivity
         if (zhihuFragment != null) {
             transaction.hide(zhihuFragment);
         }
-//        if (gankFragment != null) {
-//            transaction.hide(gankFragment);
-//        }
+        if (gankFragment != null) {
+            transaction.hide(gankFragment);
+        }
 
+        if (wxFragment != null) {
+            transaction.hide(wxFragment);
+        }
+
+        if (sportsFragment != null) {
+            transaction.hide(sportsFragment);
+        }
+
+    }
+
+    @Override
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        if (wxFragment != null && itemId == R.id.wx)
+            wxFragment.getSearchWord(v.getText().toString());
+        searchPopWindows.dismiss();
+        return false;
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+            if (System.currentTimeMillis() - exitTime > 2000) {
+                Toast.makeText(this, "再次点击退出程序", Toast.LENGTH_SHORT).show();
+                exitTime = System.currentTimeMillis();
+            } else {
+                finish();
+            }
+
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

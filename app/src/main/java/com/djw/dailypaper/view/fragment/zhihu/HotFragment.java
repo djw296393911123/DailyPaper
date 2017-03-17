@@ -1,20 +1,17 @@
 package com.djw.dailypaper.view.fragment.zhihu;
 
 
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.djw.dailypaper.R;
 import com.djw.dailypaper.adapter.HotAdapter;
 import com.djw.dailypaper.base.BaseFragment;
 import com.djw.dailypaper.contracts.HotContracts;
-import com.djw.dailypaper.model.data.HotData;
+import com.djw.dailypaper.model.data.gank.HotData;
 import com.djw.dailypaper.presenter.HotPresenter;
 
 /**
@@ -80,6 +77,11 @@ public class HotFragment extends BaseFragment implements HotContracts.View, Swip
 
     @Override
     public void showComplete() {
+
+    }
+
+    @Override
+    public void showDataEmpty() {
 
     }
 
