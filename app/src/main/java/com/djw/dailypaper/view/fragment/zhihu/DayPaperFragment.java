@@ -121,6 +121,11 @@ public class DayPaperFragment extends BaseFragment implements ZhihuContracts.Vie
     }
 
     @Override
+    public void showError(String s) {
+
+    }
+
+    @Override
     public void getDayPaper(DaypaperData daypaperData) {
         adapter.notifyListChange(daypaperData, "今日资讯", false);
     }

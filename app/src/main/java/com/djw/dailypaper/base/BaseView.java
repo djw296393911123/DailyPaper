@@ -19,4 +19,5 @@ public interface BaseView<T> {
     void showDataEmpty();
 
 
+    void showError(String s);
 }

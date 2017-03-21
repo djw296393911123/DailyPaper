@@ -3,6 +3,7 @@ package com.djw.dailypaper.view.activity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
 
 import com.djw.dailypaper.R;
 import com.djw.dailypaper.adapter.ZhuanlanInfoAdapter;
@@ -58,6 +59,11 @@ public class ZhuanlanActivity extends BaseActivity implements ZhuanlanInfoContra
     @Override
     public void showDataEmpty() {
 
+    }
+
+    @Override
+    public void showError(String s) {
+        Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
     }
 
     @Override

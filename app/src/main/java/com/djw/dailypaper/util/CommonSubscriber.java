@@ -33,16 +33,16 @@ public abstract class CommonSubscriber<T> extends Subscriber<T> {
 
     @Override
     public void onError(Throwable e) {
-//        if (mView == null)
-//            return;
-//        if (mErrorMsg != null && !TextUtils.isEmpty(mErrorMsg)) {
-//            mView.showError(mErrorMsg);
-//        } else if (e instanceof ApiException) {
-//            mView.showError(e.toString());
-//        } else if (e instanceof HttpException) {
-//            mView.showError("数据加载失败ヽ(≧Д≦)ノ");
-//        } else {
-//            mView.showError("未知错误ヽ(≧Д≦)ノ");
-//        }
+        if (mView == null)
+            return;
+        if (mErrorMsg != null && !TextUtils.isEmpty(mErrorMsg)) {
+            mView.showError(mErrorMsg);
+        } else if (e instanceof ApiException) {
+            mView.showError(e.toString());
+        } else if (e instanceof HttpException) {
+            mView.showError("数据加载失败ヽ(≧Д≦)ノ");
+        } else {
+            mView.showError("未知错误ヽ(≧Д≦)ノ");
+        }
     }
 }

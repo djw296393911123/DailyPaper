@@ -1,5 +1,6 @@
 package com.djw.dailypaper.interfaces;
 
+import com.djw.dailypaper.model.data.GankBaseReponse;
 import com.djw.dailypaper.model.data.OtherData;
 import com.djw.dailypaper.model.data.gank.AndroidData;
 import com.djw.dailypaper.model.data.DaypaperData;
@@ -11,6 +12,8 @@ import com.djw.dailypaper.model.data.WxData;
 import com.djw.dailypaper.model.data.gank.ZhuanlanData;
 import com.djw.dailypaper.model.data.gank.ZhuanlanInfoData;
 import com.djw.dailypaper.model.data.sports.SportsData;
+
+import java.util.List;
 
 import retrofit2.http.GET;
 import retrofit2.http.Path;
@@ -57,19 +60,19 @@ public interface ApiRequest {
 
     //
     @GET("random/data/福利/1")
-    Observable<AndroidData> getMeiziRadom();
+    Observable<GankBaseReponse<List<AndroidData.ResultsBean>>> getMeiziRadom();
 
     @GET("data/Android/20/{page}")
-    Observable<AndroidData> getAndroid(@Path("page") String page);
+    Observable<GankBaseReponse<List<AndroidData.ResultsBean>>> getAndroid(@Path("page") String page);
 
     @GET("data/all/20/{page}")
-    Observable<AndroidData> getAll(@Path("page") String page);
+    Observable<GankBaseReponse<List<AndroidData.ResultsBean>>> getAll(@Path("page") String page);
 
     @GET("data/福利/20/{page}")
-    Observable<AndroidData> getMeizi(@Path("page") String page);
+    Observable<GankBaseReponse<List<AndroidData.ResultsBean>>> getMeizi(@Path("page") String page);
 
     @GET("data/iOS/20/{page}")
-    Observable<AndroidData> getIos(@Path("page") String page);
+    Observable<GankBaseReponse<List<AndroidData.ResultsBean>>> getIos(@Path("page") String page);
 
     @GET("wxnew/")
     Observable<WxData> getWx(@Query("key") String key, @Query("num") String num, @Query("page") String page);

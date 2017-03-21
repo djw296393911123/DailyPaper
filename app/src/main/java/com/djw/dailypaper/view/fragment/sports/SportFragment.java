@@ -138,6 +138,10 @@ public class SportFragment extends BaseFragment implements SportsContracts.View,
     }
 
     @Override
+    public void showError(String s) {
+    }
+
+    @Override
     public void getSports(SportsData data) {
         adapter.notifyDataChange(data.getNewslist(), false);
     }

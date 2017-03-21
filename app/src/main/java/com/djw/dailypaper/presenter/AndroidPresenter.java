@@ -1,13 +1,13 @@
 package com.djw.dailypaper.presenter;
 
 import com.djw.dailypaper.contracts.AndroidContracts;
-import com.djw.dailypaper.model.AndroidModel;
+import com.djw.dailypaper.model.data.GankBaseReponse;
 import com.djw.dailypaper.model.data.gank.AndroidData;
+import com.djw.dailypaper.retrofit.GankUtil;
+import com.djw.dailypaper.util.CommonSubscriber;
 import com.djw.dailypaper.util.RxUtil;
 
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import java.util.List;
 
 /**
  * Created by JasonDong on 2017/3/16.
@@ -17,11 +17,9 @@ public class AndroidPresenter implements AndroidContracts.Presenter {
 
     private AndroidContracts.View view;
 
-    private AndroidModel model;
 
     public AndroidPresenter(AndroidContracts.View view) {
         this.view = view;
-        this.model = new AndroidModel();
     }
 
     @Override
@@ -32,69 +30,42 @@ public class AndroidPresenter implements AndroidContracts.Presenter {
     @Override
     public void getDataFromModel(String... args) {
         view.showProgress();
-        model.loadData(args[0])
-                .compose(RxUtil.<AndroidData>rxSchedulerHelper())
-                .subscribe(new Subscriber<AndroidData>() {
+        GankUtil.getDefault().getAndroid(args[0])
+                .compose(RxUtil.<GankBaseReponse<List<AndroidData.ResultsBean>>>rxSchedulerHelper())
+                .compose(RxUtil.<List<AndroidData.ResultsBean>>handleResult())
+                .subscribe(new CommonSubscriber<List<AndroidData.ResultsBean>>(view) {
                     @Override
-                    public void onCompleted() {
-                        view.showComplete();
+                    public void onNext(List<AndroidData.ResultsBean> list) {
                         view.hideProgress();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        view.showFail();
-                        view.hideProgress();
-                    }
-
-                    @Override
-                    public void onNext(AndroidData data) {
-                        view.getAndroid(data);
+                        view.getAndroid(list);
                     }
                 });
     }
 
     @Override
     public void getMeizi() {
-        model.getMeizi().compose(RxUtil.<AndroidData>rxSchedulerHelper()).subscribe(new Subscriber<AndroidData>() {
-            @Override
-            public void onCompleted() {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onNext(AndroidData data) {
-                view.getMeizi(data);
-            }
-        });
+        GankUtil.getDefault().getMeiziRadom()
+                .compose(RxUtil.<GankBaseReponse<List<AndroidData.ResultsBean>>>rxSchedulerHelper())
+                .compose(RxUtil.<List<AndroidData.ResultsBean>>handleResult())
+                .subscribe(new CommonSubscriber<List<AndroidData.ResultsBean>>(view) {
+                    @Override
+                    public void onNext(List<AndroidData.ResultsBean> list) {
+                        view.getMeizi(list);
+                    }
+                });
     }
 
     @Override
     public void getMoreData(String page) {
         view.showProgress();
-        model.loadData(page)
-                .compose(RxUtil.<AndroidData>rxSchedulerHelper())
-                .subscribe(new Subscriber<AndroidData>() {
+        GankUtil.getDefault().getAndroid(page)
+                .compose(RxUtil.<GankBaseReponse<List<AndroidData.ResultsBean>>>rxSchedulerHelper())
+                .compose(RxUtil.<List<AndroidData.ResultsBean>>handleResult())
+                .subscribe(new CommonSubscriber<List<AndroidData.ResultsBean>>(view) {
                     @Override
-                    public void onCompleted() {
-                        view.showComplete();
+                    public void onNext(List<AndroidData.ResultsBean> list) {
                         view.hideProgress();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        view.showFail();
-                        view.hideProgress();
-                    }
-
-                    @Override
-                    public void onNext(AndroidData data) {
-                        view.getMoreData(data);
+                        view.getAndroid(list);
                     }
                 });
     }

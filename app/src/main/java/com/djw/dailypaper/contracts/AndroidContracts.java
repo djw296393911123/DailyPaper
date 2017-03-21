@@ -5,6 +5,8 @@ import com.djw.dailypaper.base.BasePresenter;
 import com.djw.dailypaper.base.BaseView;
 import com.djw.dailypaper.model.data.gank.AndroidData;
 
+import java.util.List;
+
 import rx.Observable;
 
 /**
@@ -14,24 +16,17 @@ import rx.Observable;
 public interface AndroidContracts {
 
     interface View extends BaseView<Presenter> {
-        void getAndroid(AndroidData data);
+        void getAndroid(List<AndroidData.ResultsBean> data);
 
-        void getMeizi(AndroidData data);
+        void getMeizi(List<AndroidData.ResultsBean> data);
 
-        void getMoreData(AndroidData data);
+        void getMoreData(List<AndroidData.ResultsBean> data);
     }
 
     interface Presenter extends BasePresenter {
         void getMeizi();
 
         void getMoreData(String page);
-    }
-
-    interface Model extends BaseModel {
-
-        Observable<AndroidData> getMeizi();
-
-        Observable<AndroidData> getMoreData(String page);
     }
 
 }

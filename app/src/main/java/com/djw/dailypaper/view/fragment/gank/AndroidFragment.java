@@ -18,6 +18,8 @@ import com.djw.dailypaper.contracts.AndroidContracts;
 import com.djw.dailypaper.model.data.gank.AndroidData;
 import com.djw.dailypaper.presenter.AndroidPresenter;
 
+import java.util.List;
+
 import static com.djw.dailypaper.util.RecyclerViewUtil.isSlideToBottom;
 
 /**
@@ -100,14 +102,14 @@ public class AndroidFragment extends BaseFragment implements AndroidContracts.Vi
     }
 
     @Override
-    public void getAndroid(AndroidData data) {
+    public void getAndroid(List<AndroidData.ResultsBean> data) {
         Log.i("data", data.toString());
-        adapter.notifyDataChange(data.getResults(), false);
+        adapter.notifyDataChange(data, false);
     }
 
     @Override
-    public void getMeizi(AndroidData data) {
-        Glide.with(getActivity()).load(data.getResults().get(0).getUrl()).asBitmap().into(head);
+    public void getMeizi(List<AndroidData.ResultsBean> data) {
+        Glide.with(getActivity()).load(data.get(0).getUrl()).asBitmap().into(head);
     }
 
     @Override
@@ -116,8 +118,13 @@ public class AndroidFragment extends BaseFragment implements AndroidContracts.Vi
     }
 
     @Override
-    public void getMoreData(AndroidData data) {
-        adapter.notifyDataChange(data.getResults(), true);
+    public void showError(String s) {
+        Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void getMoreData(List<AndroidData.ResultsBean> data) {
+        adapter.notifyDataChange(data, true);
     }
 
     @Override

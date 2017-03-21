@@ -3,6 +3,7 @@ package com.djw.dailypaper.view.fragment.gank;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -46,7 +47,17 @@ public class MeiziFragment extends BaseFragment implements MeiziContracts.View, 
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
         swipeRefreshLayout.setOnRefreshListener(this);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.rv_meizi);
-        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
+        recyclerView.setLayoutManager(layoutManager);
+        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                if (position == 0)
+                    return 2;
+                else
+                    return 1;
+            }
+        });
         recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -96,13 +107,13 @@ public class MeiziFragment extends BaseFragment implements MeiziContracts.View, 
     }
 
     @Override
-    public void getMeizi(AndroidData data) {
-        adapter.notifyDataChange(data.getResults(), false);
+    public void getMeizi(List<AndroidData.ResultsBean> data) {
+        adapter.notifyDataChange(data, false);
     }
 
     @Override
-    public void getMore(AndroidData data) {
-        adapter.notifyDataChange(data.getResults(), true);
+    public void getMore(List<AndroidData.ResultsBean> data) {
+        adapter.notifyDataChange(data, true);
     }
 
     @Override
@@ -114,5 +125,10 @@ public class MeiziFragment extends BaseFragment implements MeiziContracts.View, 
     @Override
     public void showDataEmpty() {
         Toast.makeText(getActivity(), "没有更多数据", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showError(String s) {
+        Toast.makeText(getActivity(), "s", Toast.LENGTH_SHORT).show();
     }
 }

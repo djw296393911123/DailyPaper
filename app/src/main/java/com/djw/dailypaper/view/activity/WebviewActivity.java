@@ -9,6 +9,7 @@ import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.djw.dailypaper.R;
@@ -95,6 +96,11 @@ public class WebviewActivity extends BaseActivity implements WebviewContracts.Vi
     @Override
     public void showDataEmpty() {
 
+    }
+
+    @Override
+    public void showError(String s) {
+        Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
     }
 
     @Override

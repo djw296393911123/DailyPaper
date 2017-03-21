@@ -91,6 +91,11 @@ public class ThemFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     }
 
     @Override
+    public void showError(String s) {
+
+    }
+
+    @Override
     public void getThemData(ThemData data) {
         adapter.notifyListChange(data.getOthers());
     }

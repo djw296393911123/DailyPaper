@@ -107,6 +107,11 @@ public class ThemActivity extends BaseActivity implements ThemInfoContracts.View
     }
 
     @Override
+    public void showError(String s) {
+        Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void getThemData(ThemInfoData data) {
         list = data.getStories();
         adapter.notifyListChange(data.getStories());

@@ -117,6 +117,11 @@ public class WXFragment extends BaseFragment implements SwipeRefreshLayout.OnRef
     }
 
     @Override
+    public void showError(String s) {
+
+    }
+
+    @Override
     public void getMore(WxData wxData) {
         adapter.notifyListChange(wxData.getNewslist(), true);
     }

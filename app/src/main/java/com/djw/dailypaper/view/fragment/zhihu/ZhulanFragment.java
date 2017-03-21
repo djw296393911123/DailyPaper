@@ -85,6 +85,11 @@ public class ZhulanFragment extends BaseFragment implements ZhuanlanContracts.Vi
     }
 
     @Override
+    public void showError(String s) {
+
+    }
+
+    @Override
     public void getThemData(ZhuanlanData data) {
         adapter.notifyListChange(data.getData());
     }

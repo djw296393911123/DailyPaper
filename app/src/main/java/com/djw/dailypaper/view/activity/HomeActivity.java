@@ -21,8 +21,11 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.djw.dailypaper.R;
 import com.djw.dailypaper.base.BaseActivity;
+import com.djw.dailypaper.model.data.GankBaseReponse;
 import com.djw.dailypaper.model.data.gank.AndroidData;
 import com.djw.dailypaper.retrofit.GankUtil;
+import com.djw.dailypaper.util.CommonSubscriber;
+import com.djw.dailypaper.util.RxUtil;
 import com.djw.dailypaper.util.SearchPopWindows;
 import com.djw.dailypaper.view.fragment.CardFragment;
 import com.djw.dailypaper.view.fragment.GankFragment;
@@ -30,6 +33,9 @@ import com.djw.dailypaper.view.fragment.SportsFragment;
 import com.djw.dailypaper.view.fragment.WXFragment;
 import com.djw.dailypaper.view.fragment.ZhihuFragment;
 
+import java.util.List;
+
+import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -84,12 +90,25 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
     private void getHead() {
         Log.i("11111111", "1111111111");
-        GankUtil.getDefault().getMeiziRadom().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<AndroidData>() {
-            @Override
-            public void call(AndroidData data) {
-                Glide.with(context).load(data.getResults().get(0).getUrl()).asBitmap().into(head);
-            }
-        });
+        GankUtil.getDefault().getMeiziRadom()
+                .compose(RxUtil.<GankBaseReponse<List<AndroidData.ResultsBean>>>rxSchedulerHelper())
+                .subscribe(new Subscriber<GankBaseReponse<List<AndroidData.ResultsBean>>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(GankBaseReponse<List<AndroidData.ResultsBean>> listGankBaseReponse) {
+                        Glide.with(context).load(listGankBaseReponse.getResults().get(0).getUrl()).asBitmap().into(head);
+
+                    }
+                });
     }
 
     @Override

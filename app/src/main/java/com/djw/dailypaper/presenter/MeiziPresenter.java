@@ -1,12 +1,13 @@
 package com.djw.dailypaper.presenter;
 
 import com.djw.dailypaper.contracts.MeiziContracts;
-import com.djw.dailypaper.model.MeiModel;
+import com.djw.dailypaper.model.data.GankBaseReponse;
 import com.djw.dailypaper.model.data.gank.AndroidData;
+import com.djw.dailypaper.retrofit.GankUtil;
+import com.djw.dailypaper.util.CommonSubscriber;
+import com.djw.dailypaper.util.RxUtil;
 
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import java.util.List;
 
 /**
  * Created by JasonDong on 2017/3/17.
@@ -16,11 +17,9 @@ public class MeiziPresenter implements MeiziContracts.Presenter {
 
     private MeiziContracts.View view;
 
-    private MeiModel model;
 
     public MeiziPresenter(MeiziContracts.View view) {
         this.view = view;
-        this.model = new MeiModel();
     }
 
     @Override
@@ -31,25 +30,14 @@ public class MeiziPresenter implements MeiziContracts.Presenter {
     @Override
     public void getDataFromModel(String... args) {
         view.showProgress();
-        model.loadData(args[0])
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<AndroidData>() {
+        GankUtil.getDefault().getMeizi(args[0])
+                .compose(RxUtil.<GankBaseReponse<List<AndroidData.ResultsBean>>>rxSchedulerHelper())
+                .compose(RxUtil.<List<AndroidData.ResultsBean>>handleResult())
+                .subscribe(new CommonSubscriber<List<AndroidData.ResultsBean>>(view) {
                     @Override
-                    public void onCompleted() {
+                    public void onNext(List<AndroidData.ResultsBean> list) {
                         view.hideProgress();
-                        view.showComplete();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        view.showFail();
-                        view.hideProgress();
-                    }
-
-                    @Override
-                    public void onNext(AndroidData data) {
-                        view.getMeizi(data);
+                        view.getMeizi(list);
                     }
                 });
     }
@@ -57,25 +45,14 @@ public class MeiziPresenter implements MeiziContracts.Presenter {
     @Override
     public void getMore(String page) {
         view.showProgress();
-        model.loadData(page)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<AndroidData>() {
+        GankUtil.getDefault().getMeizi(page)
+                .compose(RxUtil.<GankBaseReponse<List<AndroidData.ResultsBean>>>rxSchedulerHelper())
+                .compose(RxUtil.<List<AndroidData.ResultsBean>>handleResult())
+                .subscribe(new CommonSubscriber<List<AndroidData.ResultsBean>>(view) {
                     @Override
-                    public void onCompleted() {
-                        view.showComplete();
+                    public void onNext(List<AndroidData.ResultsBean> list) {
                         view.hideProgress();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        view.showFail();
-                        view.hideProgress();
-                    }
-
-                    @Override
-                    public void onNext(AndroidData data) {
-                        view.getMore(data);
+                        view.getMore(list);
                     }
                 });
     }

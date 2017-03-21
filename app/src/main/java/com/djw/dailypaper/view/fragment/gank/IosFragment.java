@@ -18,6 +18,8 @@ import com.djw.dailypaper.contracts.IosContracts;
 import com.djw.dailypaper.model.data.gank.AndroidData;
 import com.djw.dailypaper.presenter.IosPresenter;
 
+import java.util.List;
+
 import static com.djw.dailypaper.util.RecyclerViewUtil.isSlideToBottom;
 
 /**
@@ -101,19 +103,19 @@ public class IosFragment extends BaseFragment implements IosContracts.View, Swip
     }
 
     @Override
-    public void getIos(AndroidData data) {
+    public void getIos(List<AndroidData.ResultsBean> data) {
         Log.i("data", data.toString());
-        adapter.notifyDataChange(data.getResults(), false);
+        adapter.notifyDataChange(data, false);
     }
 
     @Override
-    public void getMeizi(AndroidData data) {
-        Glide.with(getActivity()).load(data.getResults().get(0).getUrl()).asBitmap().into(head);
+    public void getMeizi(List<AndroidData.ResultsBean> data) {
+        Glide.with(getActivity()).load(data.get(0).getUrl()).asBitmap().into(head);
     }
 
     @Override
-    public void getMore(AndroidData data) {
-        adapter.notifyDataChange(data.getResults(), true);
+    public void getMore(List<AndroidData.ResultsBean> data) {
+        adapter.notifyDataChange(data, true);
     }
 
     @Override
@@ -126,5 +128,10 @@ public class IosFragment extends BaseFragment implements IosContracts.View, Swip
     @Override
     public void showDataEmpty() {
         Toast.makeText(getActivity(), "没有更多数据", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showError(String s) {
+        Toast.makeText(getActivity(), "s", Toast.LENGTH_SHORT).show();
     }
 }

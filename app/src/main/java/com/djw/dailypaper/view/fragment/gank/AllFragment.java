@@ -95,6 +95,11 @@ public class AllFragment extends BaseFragment implements AllContracts.View, Swip
     }
 
     @Override
+    public void showError(String s) {
+        Toast.makeText(getActivity(), "s", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void showProgress() {
         swipeRefreshLayout.setRefreshing(true);
     }
@@ -115,19 +120,19 @@ public class AllFragment extends BaseFragment implements AllContracts.View, Swip
     }
 
     @Override
-    public void getAll(AndroidData data) {
+    public void getAll(List<AndroidData.ResultsBean> data) {
         Log.i("data", data.toString());
-        adapter.notifyDataChange(data.getResults(), false);
+        adapter.notifyDataChange(data, false);
     }
 
     @Override
-    public void getMeizi(AndroidData data) {
-        Glide.with(getActivity()).load(data.getResults().get(0).getUrl()).asBitmap().into(head);
+    public void getMeizi(List<AndroidData.ResultsBean> data) {
+        Glide.with(getActivity()).load(data.get(0).getUrl()).asBitmap().into(head);
     }
 
     @Override
-    public void getMore(AndroidData data) {
-        adapter.notifyDataChange(data.getResults(), true);
+    public void getMore(List<AndroidData.ResultsBean> data) {
+        adapter.notifyDataChange(data, true);
     }
 
     @Override

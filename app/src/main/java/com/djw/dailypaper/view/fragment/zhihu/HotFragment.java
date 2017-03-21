@@ -86,6 +86,11 @@ public class HotFragment extends BaseFragment implements HotContracts.View, Swip
     }
 
     @Override
+    public void showError(String s) {
+
+    }
+
+    @Override
     public void getHotData(HotData data) {
         adapter.notifyListChange(data.getRecent());
     }
