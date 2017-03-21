@@ -43,13 +43,18 @@ public class GankFragment extends BaseFragment {
         fragments.add(new IosFragment());
         fragments.add(new AllFragment());
         fragments.add(new MeiziFragment());
-        pager.setAdapter(new GankViewpagerAdapter(getChildFragmentManager(),fragments));
+        pager.setAdapter(new GankViewpagerAdapter(getChildFragmentManager(), fragments));
         tabLayout.setupWithViewPager(pager);
     }
 
     @Override
     protected int bindLayout() {
         return R.layout.fragment_gank;
+    }
+
+    public void setPager(int position) {
+        if (pager != null)
+            pager.setCurrentItem(position);
     }
 
 }

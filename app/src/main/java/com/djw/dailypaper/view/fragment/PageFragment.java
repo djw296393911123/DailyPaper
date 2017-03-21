@@ -49,23 +49,6 @@ public class PageFragment extends DialogFragment implements ViewPager.OnPageChan
         for (int i = 0; i < urls.size(); i++) {
             View view = LayoutInflater.from(getActivity()).inflate(R.layout.item_page, null);
             PhotoView photoView = (PhotoView) view.findViewById(R.id.pv_item);
-//            photoView.setOnDoubleTapListener(new GestureDetector.OnDoubleTapListener() {
-//                @Override
-//                public boolean onSingleTapConfirmed(MotionEvent e) {
-//                    dismiss();
-//                    return true;
-//                }
-//
-//                @Override
-//                public boolean onDoubleTap(MotionEvent e) {
-//                    return false;
-//                }
-//
-//                @Override
-//                public boolean onDoubleTapEvent(MotionEvent e) {
-//                    return false;
-//                }
-//            });
             photoView.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
                 @Override
                 public void onPhotoTap(View view, float x, float y) {

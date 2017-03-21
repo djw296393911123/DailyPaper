@@ -58,9 +58,11 @@ public interface ApiRequest {
     @GET("section/{id}")
     Observable<ZhuanlanInfoData> getInfoZhuanlan(@Path("id") String id);
 
-    //
     @GET("random/data/福利/1")
     Observable<GankBaseReponse<List<AndroidData.ResultsBean>>> getMeiziRadom();
+
+    @GET("random/data/福利/{num}")
+    Observable<GankBaseReponse<List<AndroidData.ResultsBean>>> getMeiziRadom(@Path("num") int num);
 
     @GET("data/Android/20/{page}")
     Observable<GankBaseReponse<List<AndroidData.ResultsBean>>> getAndroid(@Path("page") String page);

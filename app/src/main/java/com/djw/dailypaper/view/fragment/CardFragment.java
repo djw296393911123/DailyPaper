@@ -62,6 +62,7 @@ public class CardFragment extends BaseFragment {
                 .subscribe(new CommonSubscriber<List<AndroidData.ResultsBean>>(null) {
                     @Override
                     public void onNext(final List<AndroidData.ResultsBean> list) {
+                        Collections.reverse(list);
                         adapter.notifyListChange(list);
                         //为RecycleView绑定触摸事件
                         ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
