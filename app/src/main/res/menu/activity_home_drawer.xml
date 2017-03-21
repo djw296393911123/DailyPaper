@@ -19,7 +19,7 @@
     <!--android:icon="@drawable/ic_menu_manage"-->
     <!--android:title="Tools" />-->
     <!--</group>-->
-    <item android:title="资讯">
+    <item android:title="资讯" >
         <menu>
             <item
                 android:id="@+id/zhihu"

@@ -3,6 +3,7 @@ package com.djw.dailypaper.presenter;
 import com.djw.dailypaper.contracts.AndroidContracts;
 import com.djw.dailypaper.model.AndroidModel;
 import com.djw.dailypaper.model.data.gank.AndroidData;
+import com.djw.dailypaper.util.RxUtil;
 
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -32,8 +33,7 @@ public class AndroidPresenter implements AndroidContracts.Presenter {
     public void getDataFromModel(String... args) {
         view.showProgress();
         model.loadData(args[0])
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .compose(RxUtil.<AndroidData>rxSchedulerHelper())
                 .subscribe(new Subscriber<AndroidData>() {
                     @Override
                     public void onCompleted() {
@@ -56,7 +56,7 @@ public class AndroidPresenter implements AndroidContracts.Presenter {
 
     @Override
     public void getMeizi() {
-        model.getMeizi().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<AndroidData>() {
+        model.getMeizi().compose(RxUtil.<AndroidData>rxSchedulerHelper()).subscribe(new Subscriber<AndroidData>() {
             @Override
             public void onCompleted() {
 
@@ -78,8 +78,7 @@ public class AndroidPresenter implements AndroidContracts.Presenter {
     public void getMoreData(String page) {
         view.showProgress();
         model.loadData(page)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .compose(RxUtil.<AndroidData>rxSchedulerHelper())
                 .subscribe(new Subscriber<AndroidData>() {
                     @Override
                     public void onCompleted() {

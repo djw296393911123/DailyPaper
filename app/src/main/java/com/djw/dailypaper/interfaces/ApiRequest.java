@@ -1,5 +1,6 @@
 package com.djw.dailypaper.interfaces;
 
+import com.djw.dailypaper.model.data.OtherData;
 import com.djw.dailypaper.model.data.gank.AndroidData;
 import com.djw.dailypaper.model.data.DaypaperData;
 import com.djw.dailypaper.model.data.gank.HotData;
@@ -87,5 +88,8 @@ public interface ApiRequest {
 
     @GET("meinv/")
     Observable<SportsData> getGirl(@Query("key") String key, @Query("num") String num, @Query("page") String page);
+
+    @GET("story-extra/{id}")
+    Observable<OtherData> getInfo(@Path("id") String id);
 
 }

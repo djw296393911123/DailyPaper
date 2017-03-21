@@ -36,6 +36,7 @@ public class DayPaperFragment extends BaseFragment implements ZhihuContracts.Vie
     private PaperAdapter adapter;
     private int index = 1;
     private String date;
+    private boolean isLoading = false;
 
     @Override
     protected void lazyLoad() {
@@ -57,9 +58,10 @@ public class DayPaperFragment extends BaseFragment implements ZhihuContracts.Vie
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if (isSlideToBottom(recyclerView)) {
+                if (isSlideToBottom(recyclerView) && !isLoading) {
                     date = String.valueOf(presenter.loadTodayDate(1000 * 24 * 60 * 60 * index++));
                     presenter.getBeforePaper(date);
+                    isLoading = true;
                 }
             }
         });
@@ -105,12 +107,12 @@ public class DayPaperFragment extends BaseFragment implements ZhihuContracts.Vie
 
     @Override
     public void showFail() {
-
+        isLoading = false;
     }
 
     @Override
     public void showComplete() {
-
+        isLoading = false;
     }
 
     @Override

@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -17,6 +18,9 @@ import com.djw.dailypaper.base.BaseFragment;
 import com.djw.dailypaper.contracts.AllContracts;
 import com.djw.dailypaper.model.data.gank.AndroidData;
 import com.djw.dailypaper.presenter.AllPresenter;
+
+import java.util.Collections;
+import java.util.List;
 
 import static com.djw.dailypaper.util.RecyclerViewUtil.isSlideToBottom;
 
@@ -66,6 +70,7 @@ public class AllFragment extends BaseFragment implements AllContracts.View, Swip
         presenter = new AllPresenter(this);
 
         lazyLoad();
+
     }
 
     @Override

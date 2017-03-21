@@ -39,11 +39,13 @@ public class ZhihuPresenter implements ZhihuContracts.Presenter {
                     @Override
                     public void onCompleted() {
                         view.hideProgress();
+                        view.showComplete();
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         view.hideProgress();
+                        view.showFail();
                     }
 
                     @Override
@@ -68,11 +70,13 @@ public class ZhihuPresenter implements ZhihuContracts.Presenter {
                     @Override
                     public void onCompleted() {
                         view.hideProgress();
+                        view.showComplete();
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         view.hideProgress();
+                        view.showFail();
                     }
 
                     @Override

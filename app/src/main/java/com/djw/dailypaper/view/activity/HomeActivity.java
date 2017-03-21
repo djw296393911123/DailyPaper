@@ -3,6 +3,7 @@ package com.djw.dailypaper.view.activity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuInflater;
 import android.view.View;
@@ -23,6 +24,7 @@ import com.djw.dailypaper.base.BaseActivity;
 import com.djw.dailypaper.model.data.gank.AndroidData;
 import com.djw.dailypaper.retrofit.GankUtil;
 import com.djw.dailypaper.util.SearchPopWindows;
+import com.djw.dailypaper.view.fragment.CardFragment;
 import com.djw.dailypaper.view.fragment.GankFragment;
 import com.djw.dailypaper.view.fragment.SportsFragment;
 import com.djw.dailypaper.view.fragment.WXFragment;
@@ -39,6 +41,8 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     private GankFragment gankFragment;
 
     private SportsFragment sportsFragment;
+
+    private CardFragment cardFragment;
 
     private WXFragment wxFragment;
     private ImageView head;
@@ -74,13 +78,18 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     public void doBusiness() {
+        getHead();
+        initFragment(1);
+    }
+
+    private void getHead() {
+        Log.i("11111111", "1111111111");
         GankUtil.getDefault().getMeiziRadom().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<AndroidData>() {
             @Override
             public void call(AndroidData data) {
                 Glide.with(context).load(data.getResults().get(0).getUrl()).asBitmap().into(head);
             }
         });
-        initFragment(1);
     }
 
     @Override
@@ -106,6 +115,12 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             searchPopWindows = new SearchPopWindows(this, this);
             searchPopWindows.showAsDropDown(toolbar, 5, 5);
         }
+        if (item.getItemId() == R.id.search && itemId == R.id.zhihu) {
+            getHead();
+        }
+        if (item.getItemId() == R.id.search && itemId == R.id.ex) {
+            cardFragment.initData();
+        }
         return true;
     }
 
@@ -126,6 +141,9 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 break;
             case R.id.xitu:
                 initFragment(4);
+                break;
+            case R.id.ex:
+                initFragment(5);
                 break;
         }
 //        if (id == R.id.nav_camera) {
@@ -190,6 +208,15 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                     transaction.add(R.id.fl_home, sportsFragment);
                 }
                 break;
+            case 5:
+                toolbar.setTitle("Card");
+                if (cardFragment != null) {
+                    transaction.show(cardFragment);
+                } else {
+                    cardFragment = new CardFragment();
+                    transaction.add(R.id.fl_home, cardFragment);
+                }
+                break;
 
         }
         transaction.commit();
@@ -209,6 +236,10 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
         if (sportsFragment != null) {
             transaction.hide(sportsFragment);
+        }
+
+        if (cardFragment != null) {
+            transaction.hide(cardFragment);
         }
 
     }

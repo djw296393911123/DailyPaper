@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.widget.Toast;
 
@@ -14,6 +15,9 @@ import com.djw.dailypaper.base.BaseFragment;
 import com.djw.dailypaper.contracts.MeiziContracts;
 import com.djw.dailypaper.model.data.gank.AndroidData;
 import com.djw.dailypaper.presenter.MeiziPresenter;
+
+import java.util.Collections;
+import java.util.List;
 
 import static com.djw.dailypaper.util.RecyclerViewUtil.isSlideToBottom;
 
@@ -106,6 +110,7 @@ public class MeiziFragment extends BaseFragment implements MeiziContracts.View, 
         index = 1;
         presenter.getDataFromModel("1");
     }
+
     @Override
     public void showDataEmpty() {
         Toast.makeText(getActivity(), "没有更多数据", Toast.LENGTH_SHORT).show();
